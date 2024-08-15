@@ -1,5 +1,6 @@
-package com.example.tele_consult_apis.Auth.Model;
+package com.example.tele_consult_apis.Appointements.Model;
 
+import com.example.tele_consult_apis.Auth.Model.Doctor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

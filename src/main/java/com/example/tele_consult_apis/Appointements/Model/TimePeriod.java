@@ -1,4 +1,4 @@
-package com.example.tele_consult_apis.Auth.Model;
+package com.example.tele_consult_apis.Appointements.Model;
 
 
 import jakarta.persistence.*;

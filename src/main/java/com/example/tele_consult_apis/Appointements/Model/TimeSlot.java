@@ -1,12 +1,10 @@
-package com.example.tele_consult_apis.Auth.Model;
+package com.example.tele_consult_apis.Appointements.Model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
