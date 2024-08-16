@@ -1,17 +1,18 @@
 package com.example.tele_consult_apis.Auth.Services;
 
-import com.example.tele_consult_apis.Auth.Dtos.AuthRequest;
-import com.example.tele_consult_apis.Auth.Dtos.AuthResponse;
-import com.example.tele_consult_apis.Auth.Dtos.NewAccount;
-import com.example.tele_consult_apis.Auth.Dtos.NewPatientRequest;
+import com.example.tele_consult_apis.Auth.Dtos.*;
+import com.example.tele_consult_apis.Auth.Model.Doctor;
 import com.example.tele_consult_apis.Auth.Model.Patient;
+import com.example.tele_consult_apis.Auth.Model.Role;
 import com.example.tele_consult_apis.Auth.Model.User;
 import com.example.tele_consult_apis.Auth.Repository.UserRepository;
 import com.example.tele_consult_apis.Auth.config.JwtService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthenticationService {
     final PasswordEncoder passwordEncoder;
     final JwtService jwtService;
@@ -53,8 +54,10 @@ public class AuthenticationService {
                 .phone_number(newPatientRequest.phone_number())
                 .birth_date(newPatientRequest.birth_date())
                 .enabled(true)
+                .role(Role.PATIENT)
                 .gender(newPatientRequest.gender())
-                .password(passwordEncoder.encode(newPatientRequest.passWord()))
+                .password(passwordEncoder.encode(newPatientRequest.newAccount().password()))
+                .email(newPatientRequest.newAccount().email())
                 .build();
 
         userRepository.save(patient);
@@ -63,6 +66,29 @@ public class AuthenticationService {
                 patient.getEmail() ,
                 patient.getPassword()
         );
+    }
+    @Transactional
+    public NewAccount createDoctorAccount(NewDoctorRequest newDoctorRequest) {
+        Doctor doctor = Doctor
+                .builder()
+                .first_name(newDoctorRequest.first_name())
+                .last_name(newDoctorRequest.last_name())
+                .phone_number(newDoctorRequest.phone_number())
+                .email(newDoctorRequest.newAccount().email())
+                .password(passwordEncoder.encode(newDoctorRequest.newAccount().password()))
+                .schedules(newDoctorRequest.scheduleList())
+                .build();
+
+
+
+        Doctor savedDoctor = userRepository.save(doctor);
+
+
+        return  new NewAccount(
+                doctor.getEmail(),
+                doctor.getPassword()
+        );
+
     }
 
 

@@ -4,10 +4,7 @@ import com.example.tele_consult_apis.Appointements.Model.Schedule;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class Doctor extends User {
     private String first_name;
     private String last_name;
@@ -26,17 +25,20 @@ public class Doctor extends User {
 
     @Builder
     public Doctor(String first_name, String last_name,
-                  String phone_number, String specialty,
-                  String email, String password , boolean enabled
+                  String phone_number, String specialty, List<Schedule> schedules ,
+                  String email, String password , boolean enabled , Role role
+
 
     ) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.phone_number = phone_number;
         this.specialty = specialty;
+        this.schedules = schedules;
         this.setEmail(email);
         this.setPassword(password);
         this.setEnabled(enabled);
+        this.setRole(role);
 
     }
 

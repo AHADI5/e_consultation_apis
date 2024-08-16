@@ -6,8 +6,7 @@ public record NewPatientRequest(
       String gender,
       String birth_date,
       String phone_number ,
-      String passWord  ,
-      String email
+      NewAccount newAccount
 ) {
 
 }
