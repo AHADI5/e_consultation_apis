@@ -9,7 +9,7 @@ public record NewDoctorRequest(
         String last_name,
         String phone_number,
         String specialty ,
-        List<Schedule> scheduleList ,
+        List<ScheduleRequest> scheduleList ,
         NewAccount newAccount
 ) {
 }

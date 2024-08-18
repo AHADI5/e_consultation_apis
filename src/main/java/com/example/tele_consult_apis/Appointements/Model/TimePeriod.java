@@ -21,6 +21,7 @@ public class TimePeriod {
     @ManyToOne
     @JoinColumn(name = "timeslot_id")
     private TimeSlot timeslot;
+    private boolean isTaken;
 
 
 }

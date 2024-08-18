@@ -3,6 +3,7 @@ package com.example.tele_consult_apis.Auth.Model;
 import com.example.tele_consult_apis.Appointements.Model.Schedule;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 
@@ -39,6 +40,7 @@ public class Doctor extends User {
         this.setPassword(password);
         this.setEnabled(enabled);
         this.setRole(role);
+
 
     }
 

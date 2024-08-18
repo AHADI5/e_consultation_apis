@@ -15,6 +15,7 @@ import java.util.List;
 public class Schedule {
 
     @Id
+    @GeneratedValue
     private Long scheduleId;
     @ManyToOne
     @JoinColumn(name = "doctorID")

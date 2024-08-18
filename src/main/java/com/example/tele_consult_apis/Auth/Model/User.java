@@ -1,8 +1,6 @@
 package com.example.tele_consult_apis.Auth.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +22,8 @@ public class User implements UserDetails {
     private String email;
     private boolean enabled;
     private  Role role  ;
+    @OneToOne(cascade = CascadeType.ALL)
+    ProfilePic profilePic;
 
 
     /**
