@@ -1,5 +1,6 @@
 package com.example.tele_consult_apis.Auth.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +20,9 @@ public class ProfilePic {
     @Lob
     @Column(name = "data", columnDefinition = "LONGBLOB")
     private byte[] data;
-    @OneToOne(mappedBy = "profilePic")
-    private User user ;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore// Foreign key column in ProfilePic table
+    private User user;
 
 }

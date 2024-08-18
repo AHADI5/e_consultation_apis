@@ -1,9 +1,6 @@
 package com.example.tele_consult_apis.Auth.Controller;
 
-import com.example.tele_consult_apis.Auth.Dtos.NewAccount;
-import com.example.tele_consult_apis.Auth.Dtos.NewDoctorRequest;
-import com.example.tele_consult_apis.Auth.Dtos.NewPatientRequest;
-import com.example.tele_consult_apis.Auth.Dtos.ResponseMessage;
+import com.example.tele_consult_apis.Auth.Dtos.*;
 import com.example.tele_consult_apis.Auth.Model.ProfilePic;
 import com.example.tele_consult_apis.Auth.Services.AuthenticationService;
 import com.example.tele_consult_apis.Auth.Services.ImgStorage;
@@ -23,6 +20,11 @@ public record AuthController(
         AuthenticationService authenticationService ,
         ImgStorage imageStorage
 ) {
+    @PostMapping("/")
+    public AuthResponse authenticate(@RequestBody AuthRequest authRequest) {
+        return authenticationService.authenticate(authRequest);
+
+    }
     @PostMapping("/doctor")
     public NewAccount createNewDoctorAccount(@RequestBody NewDoctorRequest doctorRequest) throws IOException {
         return  authenticationService.createDoctorAccount(doctorRequest);

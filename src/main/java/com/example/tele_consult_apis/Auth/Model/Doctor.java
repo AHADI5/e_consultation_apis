@@ -22,8 +22,8 @@ public class Doctor extends User {
     private String last_name;
     private String phone_number;
     private String specialty;
-    @OneToMany(mappedBy = "doctor" , cascade = CascadeType.ALL)
-    List<Schedule> schedules  = new ArrayList<>();
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedules = new ArrayList<>();
 
     @Builder
     public Doctor(String first_name, String last_name, ProfilePic file ,

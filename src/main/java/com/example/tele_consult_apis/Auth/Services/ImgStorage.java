@@ -25,6 +25,8 @@ public record ImgStorage(
                 .user(user)
                 .build();
         profilePicRepository.save(profilePic);
+        user.setProfilePic(profilePic);
+        userRepository.save(user);
     }
 
     public ProfilePic getImgByUser (String  email) {

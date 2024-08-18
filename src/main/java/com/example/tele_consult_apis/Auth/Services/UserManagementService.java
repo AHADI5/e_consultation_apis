@@ -3,23 +3,24 @@ package com.example.tele_consult_apis.Auth.Services;
 import com.example.tele_consult_apis.Auth.Dtos.DoctorResponseRequest;
 import com.example.tele_consult_apis.Auth.Dtos.ProfilePictureDto;
 import com.example.tele_consult_apis.Auth.Model.Doctor;
-import com.example.tele_consult_apis.Auth.Model.ProfilePic;
 import com.example.tele_consult_apis.Auth.Model.Role;
 import com.example.tele_consult_apis.Auth.Model.User;
 import com.example.tele_consult_apis.Auth.Repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 
 public record UserManagementService (
         UserRepository userRepository ,
-        ProfilePic profilePic
+        ImgStorage imgStorage
+
 
 ) {
 
-    public DoctorResponseRequest getDoctorResponseRequest(long userID) {
-        Doctor doctor = (Doctor) userRepository.findDoctorByUserID(userID);
+    public DoctorResponseRequest getDoctorRequest(String email) {
+        Doctor doctor = (Doctor) userRepository.findDoctorByEmail(email);
 
         return  new DoctorResponseRequest(
                 doctor.getUserID(),
@@ -27,11 +28,7 @@ public record UserManagementService (
                 doctor.getLast_name() ,
                 doctor.getPhone_number(),
                 doctor.getSpecialty(),
-                new ProfilePictureDto(
-                        doctor.getProfilePic().getName() ,
-                        doctor.getProfilePic().getType() ,
-                        doctor.getProfilePic().getData()
-                ),
+                imgStorage.getImgByUser(doctor.getEmail()),
                 doctor.getSchedules()
         ) ;
 
@@ -54,19 +51,13 @@ public record UserManagementService (
                     doctor.getLast_name()  ,
                     doctor.getPhone_number() ,
                     doctor.getSpecialty() ,
-                    new ProfilePictureDto(
-                            doctor.getProfilePic().getName() ,
-                            doctor.getProfilePic().getType() ,
-                            doctor.getProfilePic().getData()
-                    ) ,
+                    imgStorage.getImgByUser(doctor.getEmail()),
                     doctor.getSchedules()
             ) ;
 
             doctorResponseRequestList.add(doctorResponseRequest);
         }
-
         return doctorResponseRequestList;
-
     }
 
 

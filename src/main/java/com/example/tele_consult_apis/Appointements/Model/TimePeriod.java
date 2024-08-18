@@ -1,10 +1,9 @@
 package com.example.tele_consult_apis.Appointements.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@Getter @Setter
 public class TimePeriod {
     @Id
     @GeneratedValue
@@ -19,6 +19,7 @@ public class TimePeriod {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "timeslot_id")
     private TimeSlot timeslot;
     private boolean isTaken;

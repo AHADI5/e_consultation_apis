@@ -1,6 +1,7 @@
 package com.example.tele_consult_apis.Auth.Dtos;
 
 import com.example.tele_consult_apis.Appointements.Model.Schedule;
+import com.example.tele_consult_apis.Auth.Model.ProfilePic;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public record DoctorResponseRequest(
         String last_name,
         String phone_number,
         String specialty ,
-        ProfilePictureDto  profilePictureDto ,
+        ProfilePic profilePic ,
         List<Schedule> schedules
 ){
 }

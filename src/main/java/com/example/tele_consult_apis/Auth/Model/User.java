@@ -23,8 +23,8 @@ public class User implements UserDetails {
     private boolean enabled;
     private  Role role  ;
     @OneToOne(cascade = CascadeType.ALL)
-    ProfilePic profilePic;
-
+    @JoinColumn(name = "profile_pic_id")  // Foreign key column in User table
+    private ProfilePic profilePic;
 
     /**
      * @return

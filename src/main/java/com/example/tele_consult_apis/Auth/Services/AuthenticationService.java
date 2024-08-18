@@ -91,7 +91,6 @@ public class AuthenticationService {
     public NewAccount createDoctorAccount(NewDoctorRequest newDoctorRequest) throws IOException {
         Doctor doctor = Doctor
                 .builder()
-               // .file(imageStorage.Store(newDoctorRequest.doctorDto().file()))
                 .role(Role.DOCTOR)
                 .first_name(newDoctorRequest.doctorDto().first_name())
                 .last_name(newDoctorRequest.doctorDto().last_name())
@@ -101,46 +100,69 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(newDoctorRequest.newAccount().password()))
                 .build();
 
+        List<Schedule> schedules = new ArrayList<>();
 
-        List<Schedule> schedules = new ArrayList<>() ;
-        List<TimeSlot>timeSlots  = new ArrayList<>() ;
-        List<TimePeriod> timePeriods  = new ArrayList<>() ;
-        for (ScheduleRequest schedule : newDoctorRequest.scheduleList()) {
-            for (TimeSlotRequest timeSlot : schedule.timeSlots()) {
-                for ( TimePeriodRequest timePeriod : timeSlot.timePeriods()) {
-                    TimePeriod timePeriodItem = TimePeriod
+        for (ScheduleRequest scheduleRequest : newDoctorRequest.scheduleList()) {
+            List<TimeSlot> timeSlots = new ArrayList<>();  // Create a new list for each schedule
+
+            for (TimeSlotRequest timeSlotRequest : scheduleRequest.timeSlots()) {
+                List<TimePeriod> timePeriods = new ArrayList<>();  // Create a new list for each time slot
+
+                for (TimePeriodRequest timePeriodRequest : timeSlotRequest.timePeriods()) {
+                    TimePeriod timePeriod = TimePeriod
                             .builder()
-                            .startTime(timePeriod.start())
-                            .endTime(timePeriod.end())
+                            .startTime(timePeriodRequest.start())
+                            .endTime(timePeriodRequest.end())
+                            .isTaken(false)  // Default value, can be changed based on logic
                             .build();
-                    timePeriods.add(timePeriodItem);
-                }
-                TimeSlot timeSlotItem = TimeSlot
-                        .builder()
-                        .date(timeSlot.date())
-                        .isFree(true)
-                        .timePeriods(timePeriods)
-                        .build() ;
-                timeSlots.add(timeSlotItem);
 
+
+                    timePeriods.add(timePeriod);
+                }
+
+                TimeSlot timeSlot = TimeSlot
+                        .builder()
+                        .date(timeSlotRequest.date())
+                        .isFree(true)  // Assuming all slots are free initially
+                        .timePeriods(timePeriods)  // Associate time periods with the time slot
+                        .build();
+                for (TimePeriod timePeriod : timePeriods) {
+                    timePeriod.setTimeslot(timeSlot);
+                    timePeriodRepository.save(timePeriod);
+                }
+
+                timeSlots.add(timeSlot);
             }
-            Schedule scheduleItem = Schedule
+
+            Schedule schedule = Schedule
                     .builder()
-                    .timeSlots(timeSlots)
+                    .timeSlots(timeSlots)  // Associate time slots with the schedule
                     .build();
-            schedules.add(scheduleItem);
+            for(TimeSlot timeSlot : timeSlots){
+                timeSlot.setSchedule(schedule);
+                timeSlotRepository.save(timeSlot) ;
+            }
+
+            schedules.add(schedule);
         }
 
+        // Set the schedules for the doctor and maintain the bidirectional relationship
+        for(Schedule schedule : schedules){
+            schedule.setDoctor(doctor);
+            scheduleRepository.save(schedule);
+        }
         doctor.setSchedules(schedules);
+
+
+        // Save the doctor entity, which will cascade and save schedules, time slots, and time periods
         userRepository.save(doctor);
 
-
-        return  new NewAccount(
+        return new NewAccount(
                 doctor.getEmail(),
                 doctor.getPassword()
         );
-
     }
+
 
 
 
