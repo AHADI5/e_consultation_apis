@@ -11,11 +11,13 @@ import lombok.*;
 @Setter
 public class ProfilePic {
     @Id
-    @GeneratedValue(generator = "uuid")
-    private String id ;
+    @GeneratedValue
+    private long id ;
     private String name ;
     private String type  ;
+
     @Lob
+    @Column(name = "data", columnDefinition = "LONGBLOB")
     private byte[] data;
     @OneToOne(mappedBy = "profilePic")
     private User user ;

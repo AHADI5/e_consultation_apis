@@ -4,6 +4,7 @@ import com.example.tele_consult_apis.Auth.Dtos.DoctorResponseRequest;
 import com.example.tele_consult_apis.Auth.Dtos.ProfilePictureDto;
 import com.example.tele_consult_apis.Auth.Model.Doctor;
 import com.example.tele_consult_apis.Auth.Model.ProfilePic;
+import com.example.tele_consult_apis.Auth.Model.Role;
 import com.example.tele_consult_apis.Auth.Model.User;
 import com.example.tele_consult_apis.Auth.Repository.UserRepository;
 
@@ -16,8 +17,10 @@ public record UserManagementService (
         ProfilePic profilePic
 
 ) {
+
     public DoctorResponseRequest getDoctorResponseRequest(long userID) {
         Doctor doctor = (Doctor) userRepository.findDoctorByUserID(userID);
+
         return  new DoctorResponseRequest(
                 doctor.getUserID(),
                 doctor.getFirst_name(),
@@ -35,7 +38,7 @@ public record UserManagementService (
     }
 
     public List<DoctorResponseRequest> getAllDoctor (){
-        List<User> doctors = userRepository.getAllDoctors() ;
+        List<User> doctors = userRepository.findUserByRole(Role.DOCTOR) ;
         List<Doctor> doctorList = new ArrayList<>();
         List<DoctorResponseRequest> doctorResponseRequestList = new ArrayList<>();
 
@@ -65,5 +68,7 @@ public record UserManagementService (
         return doctorResponseRequestList;
 
     }
+
+
 
 }

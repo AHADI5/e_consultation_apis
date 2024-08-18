@@ -9,8 +9,6 @@ public record UserManagementController (
         ProfilePic profilePic
 
 ) {
-    public DoctorResponseRequest getDoctorResponseRequest() {
 
-    }
 
 }

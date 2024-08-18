@@ -1,6 +1,7 @@
 package com.example.tele_consult_apis.Auth.Repository;
 
 import com.example.tele_consult_apis.Auth.Model.Doctor;
+import com.example.tele_consult_apis.Auth.Model.Role;
 import com.example.tele_consult_apis.Auth.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.yaml.snakeyaml.tokens.DocumentStartToken;
@@ -13,5 +14,7 @@ public interface UserRepository extends JpaRepository<User,Integer > {
     Optional<User> findByEmail(String username);
 
      User findDoctorByUserID(Long userID);
-     List<User>  getAllDoctors();
+     List<User>  findUserByRole(Role role);
+     User findUserByEmail(String email);
+
 }

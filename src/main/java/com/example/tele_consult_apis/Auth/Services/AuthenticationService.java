@@ -67,7 +67,7 @@ public class AuthenticationService {
     public NewAccount createAccount (NewPatientRequest newPatientRequest) throws IOException {
         Patient patient = Patient
                 .builder()
-                .file(imageStorage.Store(newPatientRequest.patientDto().file()))
+                //.file(imageStorage.Store(newPatientRequest.patientDto().file()))
                 .first_name(newPatientRequest.patientDto().first_name())
                 .last_name(newPatientRequest.patientDto().last_name())
                 .phone_number(newPatientRequest.patientDto().phone_number())
@@ -91,12 +91,13 @@ public class AuthenticationService {
     public NewAccount createDoctorAccount(NewDoctorRequest newDoctorRequest) throws IOException {
         Doctor doctor = Doctor
                 .builder()
-                .file(imageStorage.Store(newDoctorRequest.doctorDto().file()))
+               // .file(imageStorage.Store(newDoctorRequest.doctorDto().file()))
                 .role(Role.DOCTOR)
                 .first_name(newDoctorRequest.doctorDto().first_name())
                 .last_name(newDoctorRequest.doctorDto().last_name())
                 .phone_number(newDoctorRequest.doctorDto().phone_number())
                 .email(newDoctorRequest.newAccount().email())
+                .specialty(newDoctorRequest.doctorDto().specialty())
                 .password(passwordEncoder.encode(newDoctorRequest.newAccount().password()))
                 .build();
 

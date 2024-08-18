@@ -7,7 +7,7 @@ public record PatientDto(
         String last_name,
         String gender,
         String birth_date,
-        String phone_number,
-        MultipartFile file
+        String phone_number
+        //MultipartFile file
 ) {
 }
