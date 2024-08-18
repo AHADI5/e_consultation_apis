@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,9 @@ public class AuthenticationService {
     final ScheduleRepository scheduleRepository ;
     final TimeSlotRepository timeSlotRepository ;
     final TimePeriodRepository timePeriodRepository;
+    final  ImgStorage imageStorage;
 
-    public AuthenticationService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UserRepository userRepository, ScheduleRepository scheduleRepository, TimeSlotRepository timeSlotRepository, TimePeriodRepository timePeriodRepository) {
+    public AuthenticationService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UserRepository userRepository, ScheduleRepository scheduleRepository, TimeSlotRepository timeSlotRepository, TimePeriodRepository timePeriodRepository, ImgStorage imageStorage) {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -39,6 +41,7 @@ public class AuthenticationService {
         this.scheduleRepository = scheduleRepository;
         this.timeSlotRepository = timeSlotRepository;
         this.timePeriodRepository = timePeriodRepository;
+        this.imageStorage = imageStorage;
     }
 
 
@@ -61,18 +64,20 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public NewAccount createAccount (NewPatientRequest newPatientRequest) {
+    public NewAccount createAccount (NewPatientRequest newPatientRequest) throws IOException {
         Patient patient = Patient
                 .builder()
-                .first_name(newPatientRequest.first_name())
-                .last_name(newPatientRequest.last_name())
-                .phone_number(newPatientRequest.phone_number())
-                .birth_date(newPatientRequest.birth_date())
+                .file(imageStorage.Store(newPatientRequest.patientDto().file()))
+                .first_name(newPatientRequest.patientDto().first_name())
+                .last_name(newPatientRequest.patientDto().last_name())
+                .phone_number(newPatientRequest.patientDto().phone_number())
+                .birth_date(newPatientRequest.patientDto().birth_date())
                 .enabled(true)
                 .role(Role.PATIENT)
-                .gender(newPatientRequest.gender())
+                .gender(newPatientRequest.patientDto().gender())
                 .password(passwordEncoder.encode(newPatientRequest.newAccount().password()))
                 .email(newPatientRequest.newAccount().email())
+
                 .build();
 
         userRepository.save(patient);
@@ -83,12 +88,14 @@ public class AuthenticationService {
         );
     }
     @Transactional
-    public NewAccount createDoctorAccount(NewDoctorRequest newDoctorRequest) {
+    public NewAccount createDoctorAccount(NewDoctorRequest newDoctorRequest) throws IOException {
         Doctor doctor = Doctor
                 .builder()
-                .first_name(newDoctorRequest.first_name())
-                .last_name(newDoctorRequest.last_name())
-                .phone_number(newDoctorRequest.phone_number())
+                .file(imageStorage.Store(newDoctorRequest.doctorDto().file()))
+                .role(Role.DOCTOR)
+                .first_name(newDoctorRequest.doctorDto().first_name())
+                .last_name(newDoctorRequest.doctorDto().last_name())
+                .phone_number(newDoctorRequest.doctorDto().phone_number())
                 .email(newDoctorRequest.newAccount().email())
                 .password(passwordEncoder.encode(newDoctorRequest.newAccount().password()))
                 .build();

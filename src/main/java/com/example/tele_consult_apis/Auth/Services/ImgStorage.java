@@ -13,7 +13,7 @@ import java.io.IOException;
 public record ImgStorage(
         ProfilePicRepository profilePicRepository
 ) {
-    public ProfilePictureDto Store (MultipartFile file) throws IOException {
+    public ProfilePic Store (MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         ProfilePic profilePic =  ProfilePic
                 .builder()
@@ -21,22 +21,17 @@ public record ImgStorage(
                 .type(file.getContentType())
                 .data(file.getBytes())
                 .build();
-        ProfilePic savedProfile =   profilePicRepository.save(profilePic);
-
-        return  new ProfilePictureDto(
-                savedProfile.getName() ,
-                savedProfile.getType(),
-                savedProfile.getData()
-        ) ;
+        return profilePicRepository.save(profilePic);
     }
 
     public ProfilePictureDto getImgByUser (User user) {
-        ProfilePic profilePic =  profilePicRepository.findProfilePicByUser(user);
-        return  new ProfilePictureDto(
-                profilePic.getName() ,
-                profilePic.getType(),
-                profilePic.getData()
-        ) ;
+       ProfilePic profilePic =   profilePicRepository.findProfilePicByUser(user);
+       return new ProfilePictureDto(
+               profilePic.getName() ,
+               profilePic.getType() ,
+               profilePic.getData()
+       );
+
     }
 
 

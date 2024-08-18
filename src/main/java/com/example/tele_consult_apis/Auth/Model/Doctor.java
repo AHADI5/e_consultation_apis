@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class Doctor extends User {
     List<Schedule> schedules  = new ArrayList<>();
 
     @Builder
-    public Doctor(String first_name, String last_name,
+    public Doctor(String first_name, String last_name, ProfilePic file ,
                   String phone_number, String specialty, List<Schedule> schedules ,
                   String email, String password , boolean enabled , Role role
 
@@ -40,6 +41,7 @@ public class Doctor extends User {
         this.setPassword(password);
         this.setEnabled(enabled);
         this.setRole(role);
+        this.setProfilePic(file);
 
 
     }

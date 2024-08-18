@@ -19,7 +19,7 @@ public class Patient extends User {
 
     @Builder
     public Patient(String first_name, String last_name,
-                   String gender, String birth_date,
+                   String gender, String birth_date, ProfilePic file ,
                    String phone_number, String email, String password, boolean enabled , Role role
     ) {
         this.first_name = first_name;
@@ -31,6 +31,7 @@ public class Patient extends User {
         this.setPassword(password);
         this.setEnabled(enabled);
         this.setRole(role);
+        this.setProfilePic(file);
 
 
 
