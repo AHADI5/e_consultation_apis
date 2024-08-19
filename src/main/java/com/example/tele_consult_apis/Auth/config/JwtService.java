@@ -35,20 +35,31 @@ public class JwtService {
             Map<String, Object> extractClaims,
             UserDetails userDetails
     ) {
+        // Extract authorities from UserDetails
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        // Convert authorities to a comma-separated string
         String authorityString = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // Get role from authorities (assuming there's only one role)
+        String role = authorities.stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("ROLE_USER"); // Default role if none found
+
+        // Build the JWT
         return Jwts
                 .builder()
-                .setClaims(extractClaims)
-                .setSubject(userDetails.getUsername())
-                .claim("authorities" , authorityString)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // one hour for testing
-                .signWith(getSignInkey(), SignatureAlgorithm.HS256)
-                .compact();
+                .setClaims(extractClaims) // Set additional claims if needed
+                .setSubject(userDetails.getUsername()) // Username of the user
+                .claim("authorities", authorityString) // Authorities as a comma-separated string
+                .claim("role", role) // Add the role to the claims
+                .setIssuedAt(new Date(System.currentTimeMillis())) // Token issue time
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Token expiration time (1 hour for testing)
+                .signWith(getSignInkey(), SignatureAlgorithm.HS256) // Sign the token
+                .compact(); // Create the final token string
     }
 
     public String generateToken(UserDetails userDetails) {
