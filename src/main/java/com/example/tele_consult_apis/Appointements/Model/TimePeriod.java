@@ -23,8 +23,8 @@ public class TimePeriod {
     @JoinColumn(name = "timeslot_id")
     private TimeSlot timeslot;
     private boolean isTaken;
-    @OneToOne(cascade = CascadeType.ALL)
-    private TimePeriod timePeriod ;
+    @OneToOne(mappedBy = "timePeriod", cascade = CascadeType.ALL)
+    private Appointment appointment;
 
 
 

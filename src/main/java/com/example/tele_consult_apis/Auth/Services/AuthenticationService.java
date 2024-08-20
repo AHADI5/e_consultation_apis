@@ -4,14 +4,8 @@ import com.example.tele_consult_apis.Appointements.Model.Schedule;
 import com.example.tele_consult_apis.Appointements.Model.TimePeriod;
 import com.example.tele_consult_apis.Appointements.Model.TimeSlot;
 import com.example.tele_consult_apis.Auth.Dtos.*;
-import com.example.tele_consult_apis.Auth.Model.Doctor;
-import com.example.tele_consult_apis.Auth.Model.Patient;
-import com.example.tele_consult_apis.Auth.Model.Role;
-import com.example.tele_consult_apis.Auth.Model.User;
-import com.example.tele_consult_apis.Auth.Repository.ScheduleRepository;
-import com.example.tele_consult_apis.Auth.Repository.TimePeriodRepository;
-import com.example.tele_consult_apis.Auth.Repository.TimeSlotRepository;
-import com.example.tele_consult_apis.Auth.Repository.UserRepository;
+import com.example.tele_consult_apis.Auth.Model.*;
+import com.example.tele_consult_apis.Auth.Repository.*;
 import com.example.tele_consult_apis.Auth.config.JwtService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,8 +26,9 @@ public class AuthenticationService {
     final TimeSlotRepository timeSlotRepository ;
     final TimePeriodRepository timePeriodRepository;
     final  ImgStorage imageStorage;
+    final AddressRepository addressRepository;
 
-    public AuthenticationService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UserRepository userRepository, ScheduleRepository scheduleRepository, TimeSlotRepository timeSlotRepository, TimePeriodRepository timePeriodRepository, ImgStorage imageStorage) {
+    public AuthenticationService(PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, UserRepository userRepository, ScheduleRepository scheduleRepository, TimeSlotRepository timeSlotRepository, TimePeriodRepository timePeriodRepository, ImgStorage imageStorage, AddressRepository addressRepository) {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -42,6 +37,7 @@ public class AuthenticationService {
         this.timeSlotRepository = timeSlotRepository;
         this.timePeriodRepository = timePeriodRepository;
         this.imageStorage = imageStorage;
+        this.addressRepository = addressRepository;
     }
 
 
@@ -65,8 +61,15 @@ public class AuthenticationService {
 
     @Transactional
     public NewAccount createAccount (NewPatientRequest newPatientRequest) throws IOException {
+        Address address = Address
+                .builder()
+                .avenue(newPatientRequest.address().avenue())
+                .quarter(newPatientRequest.address().quarter())
+                .houseNumber(newPatientRequest.address().houseNumber())
+                .build();
         Patient patient = Patient
                 .builder()
+                .address(addressRepository.save(address))
                 //.file(imageStorage.Store(newPatientRequest.patientDto().file()))
                 .first_name(newPatientRequest.patientDto().first_name())
                 .last_name(newPatientRequest.patientDto().last_name())
@@ -89,9 +92,16 @@ public class AuthenticationService {
     }
     @Transactional
     public NewAccount createDoctorAccount(NewDoctorRequest newDoctorRequest) throws IOException {
+        Address address = Address
+                .builder()
+                .avenue(newDoctorRequest.address().avenue())
+                .quarter(newDoctorRequest.address().quarter())
+                .houseNumber(newDoctorRequest.address().houseNumber())
+                .build();
         Doctor doctor = Doctor
                 .builder()
                 .role(Role.DOCTOR)
+                .address(addressRepository.save(address))
                 .first_name(newDoctorRequest.doctorDto().first_name())
                 .last_name(newDoctorRequest.doctorDto().last_name())
                 .phone_number(newDoctorRequest.doctorDto().phone_number())

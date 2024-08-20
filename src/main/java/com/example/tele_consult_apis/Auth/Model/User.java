@@ -21,7 +21,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
-
     private String password;
     private String email;
     private boolean enabled;
@@ -32,6 +31,9 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_pic_id")  // Foreign key column in User table
     private ProfilePic profilePic;
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address ;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
