@@ -6,6 +6,7 @@ import com.example.tele_consult_apis.Appointements.Model.Means;
 import com.example.tele_consult_apis.Appointements.Model.TimePeriod;
 import com.example.tele_consult_apis.Auth.Dtos.AppointementRequest;
 import com.example.tele_consult_apis.Auth.Dtos.AppointementResponse;
+import com.example.tele_consult_apis.Auth.Dtos.AppointmentReviewRequest;
 import com.example.tele_consult_apis.Auth.Dtos.TimePeriodRequest;
 import com.example.tele_consult_apis.Auth.Model.Doctor;
 import com.example.tele_consult_apis.Auth.Model.Patient;
@@ -49,9 +50,9 @@ public record AppointmentService(
 
     }
 
-    public String appointmentReview (int appointmentID , String appointmentRequest) {
-        Optional<Appointment> appointment = appointementRepository.findById((long) appointmentID) ;
-        Appointment_state appointmentState = switch (appointmentRequest) {
+    public String appointmentReview (AppointmentReviewRequest appointmentRequest) {
+        Optional<Appointment> appointment = appointementRepository.findById((long) appointmentRequest.appointmentID()) ;
+        Appointment_state appointmentState = switch (appointmentRequest.newAppointmentSate()) {
             case "REJECTED" -> Appointment_state.REJECTED;
             case "APPROVED" -> Appointment_state.ACCEPTED;
             default -> null;
