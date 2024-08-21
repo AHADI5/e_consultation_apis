@@ -29,7 +29,8 @@ public record UserManagementService (
                 doctor.getPhone_number(),
                 doctor.getSpecialty(),
                 imgStorage.getImgByUser(doctor.getEmail()),
-                doctor.getSchedules()
+                doctor.getSchedules() ,
+                doctor.getEmail()
         ) ;
 
     }
@@ -46,13 +47,15 @@ public record UserManagementService (
 
         for (Doctor doctor : doctorList) {
             DoctorResponseRequest doctorResponseRequest = new DoctorResponseRequest(
+
                     doctor.getUserID()  ,
                     doctor.getFirst_name(),
                     doctor.getLast_name()  ,
                     doctor.getPhone_number() ,
                     doctor.getSpecialty() ,
                     imgStorage.getImgByUser(doctor.getEmail()),
-                    doctor.getSchedules()
+                    doctor.getSchedules(),
+                    doctor.getEmail()
             ) ;
 
             doctorResponseRequestList.add(doctorResponseRequest);

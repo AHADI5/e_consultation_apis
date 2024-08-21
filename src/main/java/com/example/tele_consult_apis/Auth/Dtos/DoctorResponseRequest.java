@@ -12,6 +12,7 @@ public record DoctorResponseRequest(
         String phone_number,
         String specialty ,
         ProfilePic profilePic ,
-        List<Schedule> schedules
+        List<Schedule> schedules ,
+        String email
 ){
 }
